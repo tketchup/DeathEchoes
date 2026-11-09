@@ -1,0 +1,133 @@
+# =====================================================================
+#  DeathEchoes – Konfiguration
+#  Nach Änderungen: /echoes reload (kein /reload des Servers nötig)
+# =====================================================================
+
+# Aufnahme: Jeder Spieler hat einen kleinen Ringpuffer im Arbeitsspeicher.
+# Auf die Platte geschrieben wird nur beim Tod.
+recording:
+  # Wie viele Sekunden vor dem Tod aufgezeichnet werden.
+  duration-seconds: 8
+  # Abstand zwischen zwei Messpunkten in Ticks (2-4 empfohlen, 20 Ticks = 1 s).
+  # Die Wiedergabe interpoliert dazwischen, damit die Bewegung flüssig bleibt.
+  sample-interval-ticks: 2
+
+# Wiedergabe der Echoes
+playback:
+  # Nur wenn ein Spieler mit deathechoes.see in diesem Radius (Blöcke) um den
+  # Todesort ist, läuft das Echo. Sonst wird es pausiert und die Entity entfernt.
+  view-radius: 24
+  # Maximal gleichzeitig laufende Echoes auf dem ganzen Server.
+  max-active-total: 20
+  # Maximal gleichzeitig laufende Echoes pro Chunk (Todesort).
+  max-active-per-chunk: 2
+  # Pause in Ticks zwischen Tod und Neustart der Schleife.
+  loop-pause-ticks: 40
+  # Aussehen der Geistergestalt:
+  #   SKIN    = Spielermodell mit Skin des Toten (Mannequin), voll sichtbar
+  #   GHOST   = durchscheinender Körper (ca. 15 % sichtbar, fester Wert des Clients),
+  #             Rüstung und Items bleiben voll sichtbar. Technisch über ein Scoreboard-Team
+  #             "deathechoes_ghost": Zuschauer kommen nur hinein, wenn sie in keinem anderen
+  #             Team sind (sonst sehen sie nur den Umriss wie bei OUTLINE).
+  #   OUTLINE = unsichtbarer Körper, nur der leuchtende Umriss und die Items sind sichtbar
+  appearance: GHOST
+  # Leuchtender Umriss (Glowing) um die Gestalt.
+  glowing: true
+  # Skin über den Spielernamen bei Mojang nachschlagen, wenn das Profil keinen Skin enthält
+  # (Offline-Mode-Server). Achtung: Im Offline-Mode kann jeder jeden Namen nutzen, dann
+  # erscheint ggf. der Skin eines fremden echten Accounts mit diesem Namen.
+  skin-by-name: false
+  # Darf die Gestalt Spieler wegschieben, wenn sie durch sie hindurchläuft?
+  # false = nein (über die Kollisionsregel eines Scoreboard-Teams, die der Client beachtet).
+  push-players: false
+  # Text unter dem Namen der Gestalt. {player} = Name des Toten. Leer = kein Name.
+  name-format: "&7Echo von &f{player}"
+
+# Echo-Lebensdauer und Bindung an das Grab
+echoes:
+  # Maximale Anzahl gespeicherter Echoes pro Spieler. Das älteste wird entfernt
+  # (die Grab-Kiste bleibt davon unberührt).
+  max-per-player: 3
+  # Maximale Lebensdauer in Minuten (0 = unbegrenzt, solange das Grab existiert).
+  lifetime-minutes: 0
+  # Echo auch dann erzeugen, wenn kein Grab entsteht (z. B. Tod ohne Items).
+  echo-without-grave: false
+  # Lebensdauer (Sekunden) von Echoes ohne Grab.
+  graveless-lifetime-seconds: 120
+  # Echo ausblenden, wenn die Kiste noch steht, ihr echter Inhalt aber leer ist.
+  # Hinweis: GraveBox speichert Items virtuell (Datei), die Kiste selbst ist leer.
+  # Darum greift diese Option nur für Gräber, die beim Erstellen echten Inhalt hatten.
+  remove-when-empty: true
+  # Lebensdauer (Sekunden) von Echoes aus /echoes test.
+  test-lifetime-seconds: 60
+
+# Erkennung des Grabs (Anker)
+anchor:
+  # Suchradius in Blöcken um den Todesort, in dem ein NEUER Container gesucht wird.
+  search-radius: 2
+  # Ticks nach dem Tod, bis gesucht wird (1-2, damit das Grab-Plugin fertig ist).
+  search-delay-ticks: 2
+  # Wie oft (Ticks) geprüft wird, ob die Anker-Blöcke noch existieren.
+  # Fängt Fälle ab, die kein Event auslösen (z. B. GraveBox entfernt die Kiste per setType).
+  check-interval-ticks: 30
+  # Block-Materialien, die als Grab gelten.
+  container-materials:
+    - CHEST
+    - TRAPPED_CHEST
+    - BARREL
+    - ENDER_CHEST
+    - SHULKER_BOX
+    - WHITE_SHULKER_BOX
+    - ORANGE_SHULKER_BOX
+    - MAGENTA_SHULKER_BOX
+    - LIGHT_BLUE_SHULKER_BOX
+    - YELLOW_SHULKER_BOX
+    - LIME_SHULKER_BOX
+    - PINK_SHULKER_BOX
+    - GRAY_SHULKER_BOX
+    - LIGHT_GRAY_SHULKER_BOX
+    - CYAN_SHULKER_BOX
+    - PURPLE_SHULKER_BOX
+    - BLUE_SHULKER_BOX
+    - BROWN_SHULKER_BOX
+    - GREEN_SHULKER_BOX
+    - RED_SHULKER_BOX
+    - BLACK_SHULKER_BOX
+
+# Effekte
+effects:
+  # Partikel (Seelen-Aura, Todes-Effekt, Abschied).
+  particles: true
+  # Geräusche (gedämpft, nur für Zuschauer hörbar).
+  sounds: true
+  # Lautstärke der Geräusche (0.0 - 1.0).
+  sound-volume: 0.35
+
+# Welten
+worlds:
+  # BLACKLIST = in allen Welten außer den gelisteten
+  # WHITELIST = nur in den gelisteten Welten
+  mode: BLACKLIST
+  list: []
+
+# Ausführliche Debug-Meldungen im Log.
+debug: false
+
+# Nachrichten (Farbcodes mit &)
+messages:
+  prefix: "&8[&bEchoes&8] &r"
+  no-permission: "&cDazu fehlt dir die Berechtigung."
+  players-only: "&cDieser Befehl geht nur als Spieler."
+  reloaded: "&aKonfiguration neu geladen."
+  list-header: "&7Echoes ({count}):"
+  list-entry: "&8- &b{id} &7{player} &8| &f{world} {x} {y} {z} &8| &7{cause} &8| &7{age} &8| {state}"
+  list-empty: "&7Keine Echoes gefunden."
+  state-active: "&aaktiv"
+  state-idle: "&7pausiert"
+  state-unloaded: "&8nicht geladen"
+  removed: "&aEcho &b{id} &aentfernt."
+  not-found: "&cKein Echo mit der ID &b{id}&c."
+  cleared: "&a{count} Echoes entfernt."
+  test-started: "&aTest-Echo &b{id} &agestartet ({frames} Frames, {seconds}s)."
+  test-empty: "&cDeine Aufnahme ist noch leer. Lauf ein paar Sekunden herum."
+  unknown-player: "&cUnbekannter Spieler: &f{player}"

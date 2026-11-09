@@ -1,0 +1,23 @@
+name: DeathEchoes
+version: '${version}'
+main: dev.deathechoes.DeathEchoesPlugin
+api-version: '26.3'
+description: '${description}'
+authors: [DeathEchoes]
+
+# GraveBox hat keine API. DeathEchoes liest nur den Weltzustand (Grab-Kiste) und
+# lädt nach GraveBox, damit dessen Listener zuerst registriert sind.
+softdepend: [GraveBox]
+
+# Der Befehl /echoes wird über die Brigadier-Lifecycle-API registriert (siehe DeathEchoesPlugin),
+# daher steht er bewusst nicht unter "commands:".
+
+permissions:
+  deathechoes.see:
+    description: Echoes sehen und hören, eigene Echoes auflisten
+    default: true
+  deathechoes.admin:
+    description: Alle Echoes verwalten (list fremd, remove, clear, reload, test, debug)
+    default: op
+    children:
+      deathechoes.see: true
